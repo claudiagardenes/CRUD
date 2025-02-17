@@ -1,0 +1,22 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "tp final backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claudiagardenes/CRUD.git"
+  },
+  "author": "claudia gardeñes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/claudiagardenes/CRUD/issues"
+  },
+  "homepage": "https://github.com/claudiagardenes/CRUD#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

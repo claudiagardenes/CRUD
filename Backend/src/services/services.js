@@ -46,19 +46,25 @@ const deleteUserService= async (req)=>{
 }
 const updateUserByIdService= async(req,res)=>{
     const {id}= req.params;
-    const {nombre, apellido, email, password}= req.body;
+    const updateUser= req.body;
+    
     try {
-      const userUpdate = await Usuario.findByIdAndUpdate(
-        id,
-        { nombre, apellido, email, password },
-        { new: true }
-      );
-      if (!userUpdate) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
-      }
-      res.json(userUpdate);
+      const userById = await UserModel.findByIdAndUpdate(id);
+      if (!userById)return{ statusCode: 404, message: "Usuario no encontrado" };
+      
+      userById.nombre= updateUser.nombre;
+      userById.apellido= updateUser.apellido;
+      userById.email= updateUser.email;
+      userById.password= updateUser.password;
+      userById.year= updateUser.year;
+      userById.isNewUser= updateUser.hasOwnProperty("isNewUser")
+        ? updateUser.isNewUser
+        : userById.isNewUser
+      await userById.save()
+      return{message: "ocurrio un error", statusCode: 201}
+    
     } catch (error) {
-      res.status(400).json({ message: "Error al actualizar usuario", error });
+      return{message: "ocurrio un error", statusCode:400}
     }
   };
 

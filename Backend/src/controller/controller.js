@@ -21,8 +21,8 @@ const deleteUserByIdController= async(req,res)=>{
     res.json(deleteUser)
 }
 const updateUserByIdController= async(req, res)=>{
-    const updateUser= await updateUserByIdService(req)
-    res.json(updateUser)
+    const updateUserById= await updateUserByIdService(req)
+    res.json(updateUserById)
 }
 module.exports= {addUserController, getAllUserController, getUserByIdController, deleteUserByIdController, updateUserByIdController}
 

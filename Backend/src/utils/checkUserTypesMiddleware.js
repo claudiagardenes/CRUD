@@ -11,7 +11,7 @@ const checkUserTypes= (req,res,next) =>{
     if(typeof user.apellido !== "string") {arrayOfValidations.push("apellido debe ser un string")}
     if(typeof user.email !== "string") {arrayOfValidations.push("email debe ser un string")}
     if(typeof user.password !== "string") {arrayOfValidations.push("password debe ser un string")}
-    if(typeof user.year !== "number") {arrayOfValidations.push("year debe ser un number")}
+    
    
     if(arrayOfValidations.length >0) return res.json({statusCode: 400, message: "revisa el objeto,", arrayOfValidations })
     

@@ -3,9 +3,12 @@
 const express= require('express'); 
 const router= require('../router/routes')
 
+
 const server= express();
 
 //usando el router luego de importarlo
 server.use('/', router);
+
+
 
 module.exports= server;

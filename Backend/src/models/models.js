@@ -5,11 +5,13 @@ const {mongoose, Schema}= require ('mongoose');
 const UserSchema = Schema ({
     nombre: {
       type: String,
-      required: true
+      required: true,
+      unique:true
     },
     apellido: {
       type: String,
-      required:true
+      required:true,
+      unique:true
     },
     email: {
       type: String,
@@ -18,10 +20,6 @@ const UserSchema = Schema ({
     password:{
       type: String,
     required: true
-  },
-    year:{
-      type: Number,
-      required: true
     },
     isNewUser: {
       type: Boolean,

@@ -1,5 +1,6 @@
 //aca se ejecuta la logica de services y se transforma en json para que la lea el front
 const {addUserService, getAllUserService, getUserByIdService, deleteUserService, updateUserByIdService}= require('../services/services')
+const jwt= require('jsonwebtoken');
 
 const addUserController= async(req, res)=>{
     const addUser= await addUserService(req);
@@ -7,7 +8,7 @@ const addUserController= async(req, res)=>{
 
 }
 const getAllUserController =async (req,res)=>{
-   const allUsers= await getAllUserService();
+   const allUsers= await getAllUserService(req);
    res.json(allUsers)
 }
 
@@ -21,10 +22,13 @@ const deleteUserByIdController= async(req,res)=>{
     res.json(deleteUser)
 }
 const updateUserByIdController= async(req, res)=>{
-    const updateUserById= await updateUserByIdService(req)
-    res.json(updateUserById)
+    const updateUser= await updateUserByIdService(req)
+    res.json(updateUser)
 }
-module.exports= {addUserController, getAllUserController, getUserByIdController, deleteUserByIdController, updateUserByIdController}
+const loginController = async (req,res)=>{
+
+}
+module.exports= {addUserController, getAllUserController, getUserByIdController, deleteUserByIdController, updateUserByIdController, loginController}
 
 
 

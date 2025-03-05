@@ -11,9 +11,25 @@ const cors= require('cors');
 
 const PORT= process.env.PORT || 8080;
 //Middlewares para la aplicacion
-server.use(express.json());
+server.use(express.json()); //lo defini de nuevo en routes
 server.use(morgan('dev'));
-server.use(cors());
+//  server.use(cors({origin:'https://localhost:3000'}))
+
+//CORS
+server.use(cors({ origin: 'http://localhost:3000' }));
+server.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+  );
+  next();
+});
 
 
 const logMiddleware = (req, res, next) => {

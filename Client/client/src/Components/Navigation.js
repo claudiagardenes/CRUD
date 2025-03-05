@@ -1,21 +1,35 @@
-import FormComponent from "./Login";
+
+
+import { Link } from "react-router-dom";
+import Register from "./Register";
+import Login from "./Login";
+import Contactanos from "./Contacto";
+
 
 
 function Navigation() {
   return (
-    <header >
-     
+    <div>
+    <nav>
+      <ul>
+      <li>
+        <Link to="/">Home</Link>
+        </li>
+      
+        
+        <li>
+          <Link to="/agregarusuario">Register</Link>
 
-      <nav >
-       
-        <FormComponent></FormComponent>
-       
-      </nav>
- 
-
+        </li>
      
-    </header>
+     
+        
+      </ul>
+    </nav>
+   
+    </div>
   );
 }
 
 export default Navigation;
+

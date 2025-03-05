@@ -1,192 +1,133 @@
-// Components/Login.js
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Checkbox from "@mui/material/Checkbox";
 
-import { useState, useEffect } from "react";
-import axios from "axios";
 
-const FormComponent = () => {
-  const [formData, setFormData] = useState({
-    nombre: "",
-    apellido: "",
-    email: "",
-    password: "",
-  });
-  const [usuarios, setUsuarios] = useState([]);
-  const [editId, setEditId] = useState(null);
+export default function Login
+() {
+  const [open, setOpen] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [rememberMe, setRememberMe] = React.useState(true);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleClickOpen = () => {
+    setOpen(true);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editId) {
-        // PUT request to update user
-        await axios.put(
-          `http://localhost:9000/Login/${editId}`,
-          formData
-        );
-        alert("Usuario actualizado exitosamente");
-      } else {
-        // POST request to create user
-        await axios.post("http://localhost:9000/Login", formData);
-        alert("Usuario creado exitosamente");
-      }
-      resetForm();
-      fetchUsuarios(); // Refresh the user list
-    } catch (error) {
-      console.error("Error al guardar el usuario", error);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Validar que las contraseñas coincidan
+    if (password !== confirmPassword) {
+      alert("¡Las contraseñas no coinciden!");
+      return;
     }
-  };
 
-  const fetchUsuarios = async () => {
-    try {
-      const response = await axios.get("http://localhost:9000/Login");
-      setUsuarios(response.data);
-      console.log("asdasd");
-    } catch (error) {
-      console.error("Error al obtener usuarios", error);
+    const response = await fetch("http://localhost:9000/login", {
+      // Cambia la URL si es necesario
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message);
+      handleClose(); // Cerrar el diálogo al éxito
+    } else {
+      alert(data.error);
     }
-  };
-
-  const handleEdit = (usuario) => {
-    setFormData(usuario);
-    setEditId(usuario._id); // Set the ID for updating
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:9000/Login/${id}`);
-      alert("Usuario eliminado exitosamente");
-      fetchUsuarios(); // Refresh the user list
-    } catch (error) {
-      console.error("Error al eliminar el usuario", error);
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({ nombre: "", apellido: "", email: "", password: "" });
-    setEditId(null);
-  };
-
-  useEffect(() => {
-    fetchUsuarios(); // Fetch users on component mount
-  }, []);
-
-  // Estilos en línea
-  const styles = {
-    container: {
-      backgroundColor: "#0070f3", // Color azul para el formulario
-      padding: "20px",
-      borderRadius: "8px",
-      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-      maxWidth: "400px",
-      margin: "0 auto",
-      color: "#fff",
-    },
-    form: {
-      display: "flex",
-      flexDirection: "column",
-    },
-    input: {
-      margin: "10px 0",
-      padding: "10px",
-      border: "1px solid #ccc",
-      borderRadius: "4px",
-      backgroundColor: "#fff", // Color blanco para los campos
-      fontSize: "16px",
-    },
-    button: {
-      padding: "10px",
-      backgroundColor: "#0056b3", // Color del botón
-      color: "white",
-      border: "none",
-      borderRadius: "4px",
-      cursor: "pointer",
-      fontSize: "16px",
-      margin: "5px 0",
-    },
-    buttonHover: {
-      backgroundColor: "#004494", // Color del botón al pasar el ratón
-    },
-    title: {
-      color: "#fff", // Color del título de la lista de usuarios
-    },
-    list: {
-      listStyleType: "none", // Sin puntos en la lista
-      padding: 0,
-    },
-    listItem: {
-      margin: "10px 0",
-      color: "#fff", // Color del texto de la lista
-    },
   };
 
   return (
-    <div style={styles.container}>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="text"
-          name="nombre"
-          placeholder="Nombre"
-          value={formData.nombre}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <input
-          type="text"
-          name="apellido"
-          placeholder="Apellido"
-          value={formData.apellido}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contraseña"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <button type="submit" style={styles.button}>
-          {editId ? "Actualizar" : "Enviar"}
-        </button>
-      </form>
+    <React.Fragment>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Login
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Login
 
-      <h2 style={styles.title}>Lista de Usuarios</h2>
-      <ul style={styles.list}>
-        {Array.isArray(usuarios) &&
-          usuarios.map((usuario) => (
-            <li key={usuario._id} style={styles.listItem}>
-              {usuario.nombre} {usuario.apellido} - {usuario.email}
-              <button onClick={() => handleEdit(usuario)} style={styles.button}>
-                Editar
-              </button>
-              <button
-                onClick={() => handleDelete(usuario._id)}
-                style={styles.button}
-              >
-                Eliminar
-              </button>
-            </li>
-          ))}
-      </ul>
-    </div>
+        </DialogTitle>
+        <form onSubmit={handleSubmit}>
+          <DialogContent>
+            <DialogContentText>Ingrese su correo electrónico</DialogContentText>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="email"
+              name="email"
+              label="Correo Electrónico"
+              type="email"
+              fullWidth
+              variant="standard"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </DialogContent>
+
+          <DialogContent>
+            <DialogContentText>Ingrese su contraseña</DialogContentText>
+            <TextField
+              required
+              margin="dense"
+              id="password"
+              name="password"
+              label="Contraseña"
+              type="password"
+              fullWidth
+              variant="standard"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </DialogContent>
+
+          <DialogContent>
+            <DialogContentText>Repetir Contraseña</DialogContentText>
+            <TextField
+              required
+              margin="dense"
+              id="confirmPassword"
+              name="confirmPassword"
+              label="Repetir Contraseña"
+              type="password"
+              fullWidth
+              variant="standard"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </DialogContent>
+          <DialogContent>
+            <Checkbox
+              checked={rememberMe}
+              onChange={() => setRememberMe(!rememberMe)}
+              inputProps={{ "aria-label": "Recordarme" }}
+            />
+            Recordarme
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
+            <Button type="submit">
+              Loguearme
+              </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </React.Fragment>
   );
-};
-
-export default FormComponent;
+}

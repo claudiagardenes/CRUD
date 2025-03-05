@@ -7,8 +7,7 @@ const router= require('../router/routes')
 const server= express();
 
 //usando el router luego de importarlo
-server.use('/', router);
-
+server.use('/api', router);
 
 
 module.exports= server;

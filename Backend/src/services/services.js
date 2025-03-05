@@ -1,14 +1,14 @@
 //Aca va la logica de cada una de las rutas
-const UserModel= require('../models/models');
+const Usuario= require('../models/models');
 const bcrypt= require('bcrypt'); 
 
 
  const addUserService = async (req,res)=>{
     //llamo al body para hacer una peticion POST
-    const user= req.body;
+    const usuario= req.body;
    try{
 
-         const newUser= new UserModel(user); //lo voy a instanciar para ver si pasa el contrato
+         const newUser= new Usuario(usuario); //lo voy a instanciar para ver si pasa el contrato
         await newUser.save() //si lo paso, lo guardo en la db
          return{message: "usuario generado con exito", statusCode: 201};
       
@@ -21,13 +21,13 @@ const bcrypt= require('bcrypt');
 
 
 const getAllUserService= async (req,res)=>{
-    const allUser= await UserModel.find();
+    const allUser= await Usuario.find();
     return allUser
 }
 
 const getUserByIdService= async(req)=>{
     const {id}= req.params;
-    const userById= await UserModel.findById(id)
+    const userById= await Usuario.findById(id)
     if(!userById){
         return{statusCode: 404, message: "user not found"}
     }
@@ -37,7 +37,7 @@ const getUserByIdService= async(req)=>{
 const deleteUserService= async (req)=>{
    const {id}=  req.params;
    try{
-   const deleteUser= await UserModel.deleteOne({_id:id})
+   const deleteUser= await Usuario.deleteOne({_id:id})
    if(deleteUser.deleteCount===0)//el producto ya no existe
    {
     return {statusCode: 404, message: "user not found"}
@@ -53,11 +53,15 @@ const updateUserByIdService= async(req,res)=>{
     const updateUser= req.body;
     
     try {
-      const userById = await UserModel.findByIdAndUpdate(id);
+      const userById = await Usuario.findByIdAndUpdate(id);
       if (!userById)return{ statusCode: 404, message: "Usuario no encontrado" };
       
-      userById.nombre= updateUser.nombre;
-      userById.apellido= updateUser.apellido;
+      userById.name
+      = updateUser.name
+      ;
+      userById.surname
+      = updateUser.surname
+      ;
       userById.email= updateUser.email;
       userById.password= updateUser.password;
       
@@ -65,7 +69,7 @@ const updateUserByIdService= async(req,res)=>{
         ? updateUser.isNewUser
         : userById.isNewUser
       await userById.save()
-      return{message: "ocurrio un error", statusCode: 201}
+      return{message: "usuario modificado", statusCode: 201}
     
     } catch (error) {
       return{message: "ocurrio un error", statusCode:400}
@@ -76,7 +80,7 @@ const updateUserByIdService= async(req,res)=>{
        //llamo al body para hacer una peticion POST
        const {email,password}= req.body;
        try{
-           const userFound=  await UserModel.findOne({email});
+           const userFound=  await Usuario.findOne({email});
            if (!userFound) return res.status(400).json({message: "user not found"});
 
            const isMatch= await bcrypt.compare(password, userFound.password);
@@ -93,7 +97,7 @@ const updateUserByIdService= async(req,res)=>{
   }
 
 
-module.exports= {addUserService, getAllUserService, getUserByIdService, deleteUserService, updateUserByIdService};
+module.exports= {addUserService, getAllUserService, getUserByIdService, deleteUserService, updateUserByIdService, loginService};
 
 
           

@@ -6,6 +6,7 @@ const router = express.Router();
 
 //peticion para mostrar frases aleatorias de una API
 
+
     
     router.get('/citas', async (req, res) => {
         try {

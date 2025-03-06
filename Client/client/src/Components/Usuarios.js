@@ -6,7 +6,7 @@ import axios from "axios";
 
 function Usuarios() {
   //hooks
-  const [data, setData] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const navegar = useNavigate()
   useEffect(() => {
     obtenerUsuarios();
@@ -15,7 +15,7 @@ function Usuarios() {
   const obtenerUsuarios = async () => {
     const usuarios = (await axios.get("http://localhost:9000/api/users")).data;
     console.log(usuarios);
-    setData(usuarios);
+    setUsuarios(usuarios);
   };
 
   function borrarUsuario(id){
@@ -31,17 +31,17 @@ function Usuarios() {
     <div className="container">
       <h2> Usuarios </h2>
       <div>
-        {data.map((item) => {
+        {usuarios.map((usuario) => {
           return (
-            <div className="card" key={item._id+1}>
-              <div className="row" key={item._id+2}>
-                <div key={item._id} className="col-sm-6 offset-3">
+            <div className="card" key={usuario._id+1}>
+              <div className="row" key={usuario._id+2}>
+                <div key={usuario._id} className="col-sm-6 offset-3">
                  
-                  <p>Nombre: {item.nombre}</p>
-                  <p>Apellido: {item.apellido}</p>
-                  <p>email: {item.email}</p>
-                <Link to={`/editarusuario/${item._id}`}><li className="btn btn-success">Editar Usuario</li></Link>
-                <button className="btn btn-danger" onClick={()=>{borrarUsuario(item._id)}}>Borrar</button>
+                  <p>Nombre: {usuario.nombre}</p>
+                  <p>Apellido: {usuario.apellido}</p>
+                  <p>email: {usuario.email}</p>
+                <Link to={`/editarusuario/${usuario._id}`}><li className="btn btn-success">Editar Usuario</li></Link>
+                <button className="btn btn-danger" onClick={()=>{borrarUsuario(usuario._id)}}>Borrar</button>
                 <hr className="mt-4"></hr>
                 </div>
               </div>

@@ -14,7 +14,6 @@ const PORT= process.env.PORT || 8080;
 server.use(express.json()); //lo defini de nuevo en routes
 server.use(morgan('dev'));
 //  server.use(cors({origin:'https://localhost:3000'}))
-
 //CORS
 server.use(cors({ origin: 'http://localhost:3000' }));
 server.use((req, res, next) => {
@@ -30,6 +29,7 @@ server.use((req, res, next) => {
   );
   next();
 });
+
 
 
 const logMiddleware = (req, res, next) => {
